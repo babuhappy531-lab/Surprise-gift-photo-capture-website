@@ -39,4 +39,6 @@ then you can use it on other session after starting the server:
 cloudflared tunnel --url http://localhost:3000
 ```
 
+Now the cloudflared will generate a link you can copy it and send it to your victim.
+
 made with love and hardwork of happy!
