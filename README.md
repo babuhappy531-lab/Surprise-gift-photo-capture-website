@@ -11,7 +11,7 @@ A simple web application that shows a "Surprise Gift" opening animation and save
 1.**Clone it or download it to your device**:
 ```bash
   apt install git -y nodejs -y
-  git clone https://github.com/babuhappy531-lab/Surprise-gift-photo-capture-website/
+  git clone https://github.com/babuhappy531-lab/Surprise-gift-photo-capture-website
 ```
 2. **Install dependencies**:
 
